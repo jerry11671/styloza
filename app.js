@@ -16,8 +16,42 @@ const customerAuthRouter = require('./customer/routes/auth');
 
 const sproviderAuthRouter = require('./service-provider/routes/auth')
 const sproviderOrderRouter = require('./service-provider/routes/orders')
+const catalogueRouter = require('./service-provider/routes/catalogue')
 
 const port = process.env.PORT || 3000;
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+
+// Swagger definition
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Styloza',
+            version: '1.0.0',
+            description: 'API documentation using Swagger',
+        },
+        servers: [
+            {
+                url: `http://localhost:${port}`,
+            },
+        ],
+   components: {
+     securitySchemes: {
+         bearerAuth: {
+             type: 'http',
+             scheme: 'bearer',
+             bearerFormat: 'JWT', 
+         },
+     },
+ },
+    },
+    apis: ['./routes/*.js'], // Path to your API docs
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 // routes
@@ -33,6 +67,8 @@ app.use('/api/v1/customer/auth', customerAuthRouter);
 app.use('/api/v1/sprovider/auth', sproviderAuthRouter);
 
 app.use('/api/v1/sprovider/orders', sproviderOrderRouter);
+
+app.use('/api/v1/sprovider/catalogue', catalogueRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);

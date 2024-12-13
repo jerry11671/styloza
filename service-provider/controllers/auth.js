@@ -44,6 +44,10 @@ const register = async (req, res, next) => {
     console.log(error);
   }
 
+  req.user.id = user.id 
+
+  next();
+
   res.status(200).json({ status: true, user, token: token });
 };
 

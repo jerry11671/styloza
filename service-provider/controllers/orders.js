@@ -11,6 +11,7 @@ const getAllOrders = async (req, res) => {
 }
 
 
+// Gets all the orders from several clients 
 const getOrder = async (req, res) => {
     const {id:orderId} = req.params
     const order = await Order.find({_id: orderId}).populate('product')
@@ -18,17 +19,21 @@ const getOrder = async (req, res) => {
 }
 
 
+// Gets the completed orders
 const getCompletedOrders = async (req, res) => {
     const completedOrders = await Order.find({completed: true}).select('-completed')
     return res.status(StatusCodes.OK).json({success: true, completedOrders})
 }
 
+
+// Get the pending orders
 const getPendingOrders = async (req, res) => {
     const pendingOrders = await Order.find({completed: false}).select('-completed')
     return res.status(StatusCodes.OK).json({success: true, pendingOrders})
 }
 
 
+// Accept the order from a client 
 const acceptOrder = async (req, res) => {
     const {id:orderId} = req.params
     const {id: designerId} = req.user

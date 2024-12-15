@@ -1,7 +1,7 @@
 const { User, Otp } = require("../../models/User");
 const { BadRequestError, UnauthenticatedError } = require("../../errors");
 const { StatusCodes } = require("http-status-codes");
-const transporter = require('../../middlewares/sendMail');
+const transporter = require('../../middlewares/send-email');
 
 
 const register = async (req, res, next) => {
@@ -39,7 +39,6 @@ const register = async (req, res, next) => {
       subject: "Activate your account",
       text: `Thank you for joining us, Use this otp to verify your account \n ${otpCode}, \n This code is valid for only 10 minutes`,
     });
-    console.log("Email sent!");
   } catch (error) {
     console.log(error);
   }

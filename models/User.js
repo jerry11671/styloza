@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const Wallet = require('./Wallet');
 
 const UserSchema = new mongoose.Schema({
     firstName: {
@@ -39,6 +39,12 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save', async function () {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+})
+
+UserSchema.post('save',  async function () {
+    if (this.isAdmin == true) {
+        await Wallet.create({userId: this._id})
+    }
 })
 
 

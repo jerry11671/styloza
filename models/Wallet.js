@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const WalletSchema = mongoose.Schema({
+const WalletSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
         ref: 'User',

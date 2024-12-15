@@ -16,6 +16,7 @@ const customerAuthRouter = require('./customer/routes/auth');
 
 const sproviderAuthRouter = require('./service-provider/routes/auth')
 const sproviderOrderRouter = require('./service-provider/routes/orders')
+const sproviderWalletRouter = require('./service-provider/routes/wallet')
 const catalogueRouter = require('./service-provider/routes/catalogue')
 
 const port = process.env.PORT || 3000;
@@ -69,6 +70,8 @@ app.use('/api/v1/sprovider/auth', sproviderAuthRouter);
 app.use('/api/v1/sprovider/orders', sproviderOrderRouter);
 
 app.use('/api/v1/sprovider/catalogue', catalogueRouter);
+
+app.use('/api/v1/sprovider/wallet', sproviderWalletRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);

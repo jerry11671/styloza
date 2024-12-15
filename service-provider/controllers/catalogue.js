@@ -4,7 +4,6 @@ const {BadRequestError} = require('../../errors')
 
 
 
-
 const addCatalogueProduct = async (req, res) => {
     const {id:designerId} = req.user;
     req.body.designerId = designerId;

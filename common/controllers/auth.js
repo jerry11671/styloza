@@ -1,7 +1,7 @@
 const { User, Otp } = require("../../models/User");
 const { BadRequestError, UnauthenticatedError } = require("../../errors");
 const { StatusCodes } = require("http-status-codes");
-const transporter = require('../../middlewares/sendMail');
+const transporter = require('../../middlewares/send-email');
 
 
 const verifyOtpCode = async (req, res) => {

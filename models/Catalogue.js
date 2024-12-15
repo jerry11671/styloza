@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const CatalogueSchema = mongoose.Schema({
+const CatalogueSchema = new mongoose.Schema({
     designerId: {
         type: mongoose.Types.ObjectId,
         ref: 'User',

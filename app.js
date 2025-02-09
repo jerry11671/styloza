@@ -11,6 +11,9 @@ const notFoundMiddleware = require('./middlewares/not-found');
 const connectDB = require('./db/connect');
 
 const customerAuthRouter = require('./customer/routes/auth');
+const customerProductRouter = require('./customer/routes/products');
+const customerOrderRouter = require('./customer/routes/orders');
+const customerAuthMiddleware = require('./middlewares/auth');
 // const profileRouter = require('./routes/profile');
 // const attendanceRouter = require('./routes/attendance')
 
@@ -21,40 +24,7 @@ const catalogueRouter = require('./service-provider/routes/catalogue')
 
 const port = process.env.PORT || 3000;
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerJSDoc = require('swagger-jsdoc');
-
 const cors = require('cors');
-
-// Swagger definition
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Styloza',
-            version: '1.0.0',
-            description: 'API documentation using Swagger',
-        },
-        servers: [
-            {
-                url: `http://localhost:${port}`,
-            },
-        ],
-   components: {
-     securitySchemes: {
-         bearerAuth: {
-             type: 'http',
-             scheme: 'bearer',
-             bearerFormat: 'JWT', 
-         },
-     },
- },
-    },
-    apis: ['./routes/*.js'], // Path to your API docs
-};
-
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(cors());
 
@@ -67,6 +37,10 @@ app.get('/', (req, res) => {
 app.use(express.json());
 
 app.use('/api/v1/customer/auth', customerAuthRouter);
+
+app.use('/api/v1/customer/product', customerAuthMiddleware, customerProductRouter);
+
+app.use('/api/v1/customer/order', customerAuthMiddleware, customerOrderRouter);
 
 app.use('/api/v1/sprovider/auth', sproviderAuthRouter);
 

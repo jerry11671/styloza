@@ -29,7 +29,7 @@ const register = async (req, res, next) => {
   if (!otpCode) {
     otpCode = Math.floor(Math.random() * 1000000).toString();
 
-    await Otp.create({ userId: user._id, code: otpCode })
+    await Otp.create({ userId: user._id, code: otpCode });
   }
 
   try {

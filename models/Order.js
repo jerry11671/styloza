@@ -18,17 +18,18 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    dateOrdered: {
-        type: Date  
-    },
     transactionId: {
         type: String
     },
-    complete: {
+    isCompleted: {
+        type: Boolean,
+        default: false
+    },
+    isAccepted: {
         type: Boolean,
         default: false
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 
 

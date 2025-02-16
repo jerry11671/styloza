@@ -32,8 +32,8 @@ const cors = require('cors');
 app.use(cors());
 
 // routes
-app.get('/', (req, res) => {
-    res.send('Your server is live');
+app.get('/healthcheck', (req, res) => {
+    res.json({ status: active });
 });
 
 // middlewares 
@@ -55,7 +55,7 @@ app.use('/api/v1/sprovider/catalogue', catalogueRouter);
 
 app.use('/api/v1/sprovider/wallet', sproviderWalletRouter);
 
-app.use('/api/v1/', webhookRouter);
+app.use('/api/v1', webhookRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);

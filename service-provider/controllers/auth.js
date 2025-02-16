@@ -101,33 +101,33 @@ const verifyOtpCode = async (req, res) => {
     return res.status(StatusCodes.OK).json({ status: true, msg: 'Account has been verified' })
   }
 
-  throw new BadRequestError('Otp code is not correct')  
+  throw new BadRequestError('Otp code is not correct')
 }
 
 const requestOtpCode = async (req, res) => {
-    const {id:userId, email} = req.user
+  const { id: userId, email } = req.user
 
-    const code = Math.floor(Math.random(0, 1) * 1000000).toString()
-    
-    const otp = await Otp.create({userId, code: code}) 
+  const code = Math.floor(Math.random(0, 1) * 1000000).toString()
 
-    try {
-        const info = await transporter.sendMail({
-          from: '"Styloza" <chiemenagodson532@gmail.com>',
-          to: email,
-          subject: "Activate your account",
-          text: `Thank you for joining us, Use this otp to verify your account \n ${otp.code}, \n This code is valid for only 10 minutes`,
-        });
-        console.log("Email sent!");
-      } catch (error) {
-        console.log(error);
-    }
+  const otp = await Otp.create({ userId, code: code })
 
-    return res.status(StatusCodes.OK).json({status: true, msg: 'Check your email'});
+  try {
+    const info = await transporter.sendMail({
+      from: '"Styloza" <chiemenagodson532@gmail.com>',
+      to: email,
+      subject: "Activate your account",
+      text: `Thank you for joining us, Use this otp to verify your account \n ${otp.code}, \n This code is valid for only 10 minutes`,
+    });
+    console.log("Email sent!");
+  } catch (error) {
+    console.log(error);
+  }
+
+  return res.status(StatusCodes.OK).json({ status: true, msg: 'Check your email' });
 
 }
 
 
 
 
-module.exports = { register, login};
+module.exports = { register, login };

@@ -2,6 +2,7 @@ const { User, Otp } = require("../../models/User");
 const { BadRequestError, UnauthenticatedError } = require("../../errors");
 const { StatusCodes } = require("http-status-codes");
 const transporter = require("../../middlewares/send-email");
+const { Wallet } = require('../../models/Wallet');
 
 const verifyOtpCode = async (req, res) => {
   const { email, otpCode } = req.body;
@@ -16,6 +17,8 @@ const verifyOtpCode = async (req, res) => {
   if (!user) {
     throw new UnauthenticatedError("User with this email does not exist");
   }
+
+  const wallet = await Wallet.findOne({ userId: user._id })
 
   const otp = await Otp.findOne({ userId: userId, code: otpCode });
 
@@ -32,6 +35,7 @@ const verifyOtpCode = async (req, res) => {
 
   if (otp.code === otpCode) {
     user.isVerified = true;
+    user.walletId = wallet._id;
     await user.save();
     await otp.deleteOne();
     return res.status(StatusCodes.OK).json({ status: true, msg: "Account has been verified" });
@@ -39,6 +43,7 @@ const verifyOtpCode = async (req, res) => {
 
   throw new BadRequestError("Otp code is not correct");
 };
+
 
 const requestOtp = async (req, res) => {
   const { id: userId, email } = req.user;

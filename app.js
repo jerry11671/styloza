@@ -14,6 +14,7 @@ const customerAuthRouter = require('./customer/routes/auth');
 const customerProductRouter = require('./customer/routes/products');
 const customerOrderRouter = require('./customer/routes/orders');
 const customerAuthMiddleware = require('./middlewares/auth');
+const customerWalletRouter = require('./customer/routes/wallet');
 // const profileRouter = require('./routes/profile');
 // const attendanceRouter = require('./routes/attendance')
 
@@ -41,6 +42,8 @@ app.use('/api/v1/customer/auth', customerAuthRouter);
 app.use('/api/v1/customer/product', customerAuthMiddleware, customerProductRouter);
 
 app.use('/api/v1/customer/order', customerAuthMiddleware, customerOrderRouter);
+
+app.use('/api/v1/customer/wallet', customerAuthMiddleware, customerWalletRouter);
 
 app.use('/api/v1/sprovider/auth', sproviderAuthRouter);
 

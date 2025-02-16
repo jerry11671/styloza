@@ -21,6 +21,15 @@ const OrderSchema = new mongoose.Schema({
     transactionId: {
         type: String
     },
+    pricingTier: {
+        type: String,
+        default: 'Luxury'
+    },
+    costOffered: {
+        type: Number
+    },
+    isExactly: Boolean,
+    isCustomized: Boolean,
     isCompleted: {
         type: Boolean,
         default: false

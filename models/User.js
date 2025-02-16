@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Wallet = require('./Wallet');
+const { Wallet } = require('./Wallet');
 
 const UserSchema = new mongoose.Schema({
     firstName: {
@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide password'],
     },
+    walletId: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Wallet'
+    },
     isAdmin: {
         type: Boolean,
         default: false
@@ -37,13 +41,16 @@ const UserSchema = new mongoose.Schema({
 
 
 UserSchema.pre('save', async function () {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    if (this.isModified('password')) {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    }
+    
 })
 
-UserSchema.post('save',  async function () {
-    if (this.isAdmin == true) {
-        await Wallet.create({userId: this._id})
+UserSchema.post('save', async function () {
+    if (!this.walletId) {
+        await Wallet.create({ userId: this._id });
     }
 })
 
@@ -55,6 +62,7 @@ UserSchema.methods.createJWT = function () {
         id: this._id,
         email: this.email,
         isAdmin: this.isAdmin,
+        walletId: this.walletId ? (this.walletId) : '',
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
 }
 
@@ -79,7 +87,7 @@ const OtpSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 OtpSchema.pre('save', function () {
     const otpExpiryDate = new Date(Date.now() + 600000); // 10 minutes
@@ -90,4 +98,4 @@ OtpSchema.pre('save', function () {
 const User = mongoose.model('User', UserSchema);
 const Otp = mongoose.model('Otp', OtpSchema);
 
-module.exports = {User, Otp}
+module.exports = { User, Otp }

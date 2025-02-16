@@ -20,8 +20,38 @@ const WalletSchema = new mongoose.Schema({
         type: String,
         default: 'NGN'
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 
 
-module.exports = mongoose.model('Wallet', WalletSchema)
+const transactionSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    senderWallet: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Wallet',
+        required: true
+    },
+    receiverWallet: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Wallet'
+    },
+    transactionId: {
+        type: String
+    },
+    accessCode: {
+        type: String
+    },
+    amount: Number
+}, { timestamps: true })
+
+
+
+const Wallet = mongoose.model('Wallet', WalletSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
+
+module.exports = { Wallet, Transaction };

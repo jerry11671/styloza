@@ -8,7 +8,7 @@ const authMiddleware = require('../../middlewares/auth')
 router.post('/register', register);
 router.post('/login', login);
 router.post('/verify-otp', authMiddleware, verifyOtpCode);
-router.get('/request-otp', authMiddleware, requestOtp);
+router.post('/request-otp', authMiddleware, requestOtp);
 
 
 
